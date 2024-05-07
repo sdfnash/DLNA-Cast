@@ -5,6 +5,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.ProgressBar
@@ -94,7 +95,10 @@ class VideoViewRendererActivity : BaseRendererActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun openMedia() {
+//        Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
         castAction?.currentURI?.run {
+            Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
+            Log.e("liuyi", "openMediaUri: ${Uri.parse(this)}")
             progressBar.visibility = View.VISIBLE
             errorMsg.visibility = View.INVISIBLE
             videoView.setVideoURI(Uri.parse(this))
