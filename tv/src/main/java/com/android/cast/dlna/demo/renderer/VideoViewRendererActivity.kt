@@ -1,6 +1,7 @@
 package com.android.cast.dlna.demo.renderer
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
@@ -97,11 +98,16 @@ class VideoViewRendererActivity : BaseRendererActivity() {
     private fun openMedia() {
 //        Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
         castAction?.currentURI?.run {
-            Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
+//            Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
             Log.e("liuyi", "openMediaUri: ${Uri.parse(this)}")
-            progressBar.visibility = View.VISIBLE
-            errorMsg.visibility = View.INVISIBLE
-            videoView.setVideoURI(Uri.parse(this))
+            //复制string到android 剪贴板
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = android.content.ClipData.newPlainText("label", this)
+            clipboard.setPrimaryClip(clip)
+
+//            progressBar.visibility = View.VISIBLE
+//            errorMsg.visibility = View.INVISIBLE
+//            videoView.setVideoURI(Uri.parse(this))
         }
         castAction?.nextURI?.run {
             nextURI = this
