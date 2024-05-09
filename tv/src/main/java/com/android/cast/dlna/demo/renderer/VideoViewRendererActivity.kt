@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.VideoView
 import com.android.cast.dlna.dmr.BaseRendererActivity
 import com.android.cast.dlna.dmr.RenderControl
@@ -100,6 +101,9 @@ class VideoViewRendererActivity : BaseRendererActivity() {
         castAction?.currentURI?.run {
 //            Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
             Log.e("liuyi", "openMediaUri: ${Uri.parse(this)}")
+            //添加toast
+            Toast.makeText(this@VideoViewRendererActivity, this, Toast.LENGTH_SHORT).show()
+            
             //复制string到android 剪贴板
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             val clip = android.content.ClipData.newPlainText("label", this)
