@@ -101,12 +101,15 @@ class VideoViewRendererActivity : BaseRendererActivity() {
         castAction?.currentURI?.run {
 //            Log.e("liuyi", "openMedia: ${castAction?.currentURI}")
             Log.e("liuyi", "openMediaUri: ${Uri.parse(this)}")
+            // 获取当前时间
+            val time = System.currentTimeMillis()
+            val result = time.toString() +" "+ this
             //添加toast
-            Toast.makeText(this@VideoViewRendererActivity, this, Toast.LENGTH_SHORT).show()
-            
+            Toast.makeText(this@VideoViewRendererActivity, result, Toast.LENGTH_SHORT).show()
+
             //复制string到android 剪贴板
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-            val clip = android.content.ClipData.newPlainText("label", this)
+            val clip = android.content.ClipData.newPlainText("label", result)
             clipboard.setPrimaryClip(clip)
 
 //            progressBar.visibility = View.VISIBLE
