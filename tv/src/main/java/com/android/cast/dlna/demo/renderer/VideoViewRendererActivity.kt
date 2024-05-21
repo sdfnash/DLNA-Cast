@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -16,6 +18,10 @@ import android.widget.VideoView
 import com.android.cast.dlna.dmr.BaseRendererActivity
 import com.android.cast.dlna.dmr.RenderControl
 import com.android.cast.dlna.dmr.RenderState
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+
 
 class VideoViewRendererActivity : BaseRendererActivity() {
 
@@ -112,6 +118,8 @@ class VideoViewRendererActivity : BaseRendererActivity() {
             val clip = android.content.ClipData.newPlainText("label", result)
             clipboard.setPrimaryClip(clip)
 
+            writeFileToExternalStorage(result)
+
 //            progressBar.visibility = View.VISIBLE
 //            errorMsg.visibility = View.INVISIBLE
 //            videoView.setVideoURI(Uri.parse(this))
@@ -121,6 +129,38 @@ class VideoViewRendererActivity : BaseRendererActivity() {
         }
         castAction?.stop?.run {
             finish()
+        }
+    }
+
+    private fun writeFileToExternalStorage(result :String) {
+        // 检查是否有外部存储设备可用
+        if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+            val file: File
+            // 从Android 10开始，推荐使用应用私有目录
+//            file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                // 获取应用的私有外部存储目录
+//                File(getExternalFilesDir(null), "dlna.txt")
+//            } else {
+//                // 获取公共外部存储目录
+//                val externalStorageDir = Environment.getExternalStorageDirectory()
+//                File(externalStorageDir, "dlna.txt")
+//            }
+            val externalStorageDir = Environment.getExternalStorageDirectory()
+            file = File(externalStorageDir, "dlna.txt")
+
+            try {
+                FileOutputStream(file).use { fos ->
+                    fos.write(result.toByteArray())
+                    fos.flush()
+                    Toast.makeText(this, "File written to " + file.absolutePath, Toast.LENGTH_LONG)
+                        .show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "File write failed: " + e.message, Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(this, "External storage is not available", Toast.LENGTH_LONG).show()
         }
     }
 
